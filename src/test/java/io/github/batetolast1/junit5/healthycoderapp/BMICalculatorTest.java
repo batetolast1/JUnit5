@@ -1,0 +1,133 @@
+// Introduction to unit testing with JUnit 5
+
+package io.github.batetolast1.junit5.healthycoderapp;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class BMICalculatorTest { // class name + "Test"
+
+    // assertTrue
+    /*@Test
+    void test() {
+        assertTrue(BMICalculator.isDietRecommended(89.0, 1.72));
+    }*/
+
+    // @BeforeAll will be executed once before each test - it's used for tests too expensive to perform before each unit test
+    // ie. start database connections or stop servers
+    // this function can have any name, but must be static!
+    @BeforeAll
+    static void beforeAll() {
+        System.out.println("Before all unit tests.");
+    }
+
+    // used to ie. close database connections or stop servers
+    @AfterAll
+    static void afterAll() {
+        System.out.println("After all unit tests");
+    }
+
+    // assertTrue()
+    @Test
+    void should_ReturnTrue_When_DietRecommended() { // method name should reflect test expected result
+        //given (or arrange) - initial conditions
+        double weight = 89.0;
+        double height = 1.72;
+
+        //when (or act) - invoke method to test and store result in variable
+        boolean recommended = BMICalculator.isDietRecommended(weight, height); // method executed normally
+
+        //then (or assert) - provide assertion
+        assertTrue(recommended);
+    }
+
+    // assertFalse()
+    @Test
+    void should_ReturnFalse_When_DietNotRecommended() { // method name should reflect test expected result
+        //given (or arrange) - initial conditions
+        double weight = 50.0;
+        double height = 1.92;
+
+        //when (or act) - invoke method to test and store result in variable
+        boolean recommended = BMICalculator.isDietRecommended(weight, height); // method executed normally
+
+        //then (or assert) - provide assertion
+        assertFalse(recommended);
+    }
+
+    // assertThrows()
+    @Test
+    void should_ThrowArithmeticException_When_HeightZero() { // method name should reflect test expected result
+        //given (or arrange) - initial conditions
+        double weight = 50.0;
+        double height = 0;
+
+        //when (or act) - invoke method to test and store result in variable
+        Executable executable = () -> BMICalculator.isDietRecommended(weight, height);
+        // method will throw exception, thus assertThrows() needs executable
+        // executable expects lambda expression
+        // executable will not be executed immediately, but in assertThrows()
+
+        //then (or assert) - provide assertion
+        assertThrows(ArithmeticException.class, executable); //
+    }
+
+    // assertAll()
+    @Test
+    void should_ReturnCoderWithWorstBMI_When_CoderListNotEmpty() {
+        // given
+        CoderDAO coderDAO = new CoderDAO();
+        List<Coder> coderList = coderDAO.getList();
+
+        // when
+        Coder coderWorstBMI = BMICalculator.findCoderWithWorstBMI(coderList);
+
+        // then
+
+        // assertEquals(1.82, coderWorstBMI.getHeight());
+        // assertEquals(98.0, coderWorstBMI.getWeight());
+
+        // if first assertion fails, result of second is newer shown, thus we need assertAll()
+        // assertAll expects lambda expressions
+        // use it for assertions that make sense as a whole
+        assertAll(
+                () -> assertEquals(1.82, coderWorstBMI.getHeight()),
+                () -> assertEquals(98.0, coderWorstBMI.getWeight())
+        );
+    }
+
+    // assertNull()
+    @Test
+    void should_ReturnNull_When_CoderListEmpty() {
+        // given
+        List<Coder> coderList = new ArrayList<>();
+
+        // when
+        Coder coderWorstBMI = BMICalculator.findCoderWithWorstBMI(coderList);
+
+        // then
+        assertNull(coderWorstBMI);
+    }
+
+    @Test
+    void should_ReturnCorrectBMIScoreArray_When_CoderListNotEmpty() {
+        // given
+        CoderDAO coderDAO = new CoderDAO();
+        List<Coder> coderList = coderDAO.getList();
+        double[] expected = {18.52, 29.59, 19.53};
+
+        // when
+        double[] bmiScores = BMICalculator.getBMIScores(coderList);
+
+        // then
+        // assertEquals(expected, bmiScores); test fails, because it compares memory addresses for arrays
+        assertArrayEquals(expected, bmiScores);
+    }
+}
