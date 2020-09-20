@@ -6,6 +6,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +36,31 @@ class BMICalculatorTest { // class name + "Test"
         System.out.println("After all unit tests");
     }
 
-    // assertTrue()
+    /*// assertTrue()
     @Test
     void should_ReturnTrue_When_DietRecommended() { // method name should reflect test expected result
         //given (or arrange) - initial conditions
         double weight = 89.0;
         double height = 1.72;
+
+        //when (or act) - invoke method to test and store result in variable
+        boolean recommended = BMICalculator.isDietRecommended(weight, height); // method executed normally
+
+        //then (or assert) - provide assertion
+        assertTrue(recommended);
+    }*/
+
+    // ParametrizedTest - for testing multiple values in method
+    @ParameterizedTest(name = "weight= {0}, height={1}") // allows to display additional info in test results
+    // @ValueSource(doubles = {89.0, 95.0, 110.0}) // source of data, but only for one value
+    // @CsvSource(value = {"89.0, 1.72", "95.0, 1.75", "110.0, 1.78"}) // allows to use CSV data directly
+    @CsvFileSource(resources = "/diet-recommended-input-data.csv", numLinesToSkip = 1)
+    // allows to load data form CSV file (from test/resources)
+    // numLinesToSkip parameter allows to skip header line with column names
+    void should_ReturnTrue_When_DietRecommended(Double coderWeight, Double coderHeight) { // method name should reflect test expected result
+        //given (or arrange) - initial conditions
+        double weight = coderWeight;
+        double height = coderHeight;
 
         //when (or act) - invoke method to test and store result in variable
         boolean recommended = BMICalculator.isDietRecommended(weight, height); // method executed normally
