@@ -12,4 +12,12 @@ public class CoderDAO {
         coderList.add(new Coder(1.82, 64.7));
         return coderList;
     }
+
+    public List<Coder> get10000CodersList() {
+        List<Coder> coderList = new ArrayList<>();
+        for (int i = 0; i < 10000; i++) {
+            coderList.add(new Coder(1.0 + i, 10.0 + i));
+        }
+        return coderList;
+    }
 }

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,6 +123,20 @@ class BMICalculatorTest { // class name + "Test"
                 () -> assertEquals(1.82, coderWorstBMI.getHeight()),
                 () -> assertEquals(98.0, coderWorstBMI.getWeight())
         );
+    }
+
+    // performance unit test
+    @Test
+    void should_ReturnCoderWithWorstBMIIn1Ms_When_CoderListHas10000Elements() {
+        // given
+        CoderDAO coderDAO = new CoderDAO();
+        List<Coder> coderList = coderDAO.get10000CodersList();
+
+        // when
+        Executable executable = () -> BMICalculator.findCoderWithWorstBMI(coderList);
+
+        // then
+        assertTimeout(Duration.ofMillis(500), executable); // asserts that execution time will be under provided value (only checks timeout in executable!)
     }
 
     // assertNull()
