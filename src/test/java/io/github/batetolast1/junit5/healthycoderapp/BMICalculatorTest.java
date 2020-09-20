@@ -14,8 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class BMICalculatorTest { // class name + "Test"
+
+    // Assumptions
+    private String environment = "dev";
 
     // assertTrue
     /*@Test
@@ -105,6 +109,10 @@ class BMICalculatorTest { // class name + "Test"
     @Test
     void should_ReturnCoderWithWorstBMI_When_CoderListNotEmpty() {
         // given
+        // Assumptions - allows to execute test only when certain conditions are met (ie. when project is moved from development to production
+        // Assumption never makes tests to fail
+        assumeTrue(this.environment.equals("prod"));
+
         CoderDAO coderDAO = new CoderDAO();
         List<Coder> coderList = coderDAO.getList();
 
