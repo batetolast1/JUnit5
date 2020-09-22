@@ -112,12 +112,14 @@ class BMICalculatorTest { // class name + "Test"
     }
 
     @Nested
-    @DisplayName("{{}} sample inner class display name") // @DisplayName allows to add custom name to test
+    @DisplayName("{{}} sample inner class display name")
+            // @DisplayName allows to add custom name to test
     class FindCoderWithWorstBMITests {
         // assertAll()
         @Test
         @DisplayName(">>>>> sample method display name")
-        @Disabled // @Disabled allows to disable test
+        @Disabled
+        // @Disabled allows to disable test
         void should_ReturnCoderWithWorstBMI_When_CoderListNotEmpty() {
             // given
             // Assumptions - allows to execute test only when certain conditions are met (ie. when project is moved from development to production
@@ -146,7 +148,8 @@ class BMICalculatorTest { // class name + "Test"
 
         // performance unit test
         @Test
-        @DisabledOnOs(OS.LINUX) // allows to disable test in certain operating systems
+        @DisabledOnOs(OS.LINUX)
+        // allows to disable test in certain operating systems
         void should_ReturnCoderWithWorstBMIIn1Ms_When_CoderListHas10000Elements() {
             // given
             CoderDAO coderDAO = new CoderDAO();
